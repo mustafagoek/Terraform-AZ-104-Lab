@@ -7,7 +7,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   admin_username      = var.username
   admin_password      = var.password
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.nic.id
   ]
 
   os_disk {
@@ -22,8 +22,9 @@ resource "azurerm_windows_virtual_machine" "vm" {
     version   = "latest"
   }
 }
+
 resource "azurerm_network_interface" "nic" {
-  name                = "${var.vm_name}-nic" #birden fazla nic karti olacagi icin herbiri vm_name-nic olarak isim alacak. Vm ismini variable den cekecek.
+  name                = "${var.vm_name}-nic"
   location            = var.location
   resource_group_name = var.resource_group_name
 
