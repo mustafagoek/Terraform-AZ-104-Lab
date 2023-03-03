@@ -4,7 +4,7 @@
             Step by step we can see our Implementation:
 1.	Open VS Code, from terminal, I clone my  new repository to my local 
 2.	In terminal, I create main.tf, outputs.tf and variables.tf files
-3.	I take terraform and Azure provider inputs from HAshicorp and put into main.tf file.
+3.	I take terraform and Azure provider inputs from Hashicorp and put into main.tf file.
 4.	Take a Azure resource group block from Hashicorp and put into main.tf
 5.	We can specify resource name and location with variables file. 
 6.	Take virtual network template from Hashicorp and put it into main.tf
