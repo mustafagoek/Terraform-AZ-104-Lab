@@ -2,33 +2,36 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "3.45.0"
+      version = "3.41.0"
     }
   }
 }
 
 provider "azurerm" {
-      features  { 
-  }
+    features {
+      
+    }
 }
+
 resource "azurerm_resource_group" "rg1" {
   name     = var.rg_name
   location = var.location
-} # degiskenleri variables ile belirlemek basta en iyisi
+}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg1.name
   address_space       = ["10.60.0.0/22"]
-
 }
+
 resource "azurerm_subnet" "subnet1" {
   name                 = var.subnet1_name
   resource_group_name  = azurerm_resource_group.rg1.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.60.0.0/24"]
 }
+
 resource "azurerm_subnet" "subnet2" {
   name                 = var.subnet2_name
   resource_group_name  = azurerm_resource_group.rg1.name
@@ -37,23 +40,23 @@ resource "azurerm_subnet" "subnet2" {
 }
 
 module "vm1" {
-  source = "./module/vm_module/"
+  source = "./module/vm_module"
   vm_name = "vm1"
   resource_group_name = azurerm_resource_group.rg1.name
-  username = "gokmus15"
-  password = "Pasword123"
+  username = "mgok"
+  password = "Password1234"
   subnet_id = azurerm_subnet.subnet1.id
-
 }
+
 module "vm2" {
-  source = "./module/vm_module/"
+  source = "./module/vm_module"
   vm_name = "vm2"
   resource_group_name = azurerm_resource_group.rg1.name
-  username = "gokmus15"
-  password = "Pasword123"
+  username = "mgok"
+  password = "Password1234"
   subnet_id = azurerm_subnet.subnet2.id
-
 }
+
 resource "azurerm_network_security_group" "nsg" {
   name                = "acceptanceTestSecurityGroup1"
   location            = var.location
@@ -83,7 +86,7 @@ resource "azurerm_subnet_network_security_group_association" "nsg_subnet_2" {
 }
 
 resource "azurerm_resource_group" "rg2" {
-  name     = var.rg_name
+  name     = var.rg2_name
   location = var.location
 }
 
@@ -106,6 +109,7 @@ resource "azurerm_lb" "lb" {
     public_ip_address_id = azurerm_public_ip.pip.id
   }
 }
+
 resource "azurerm_lb_backend_address_pool" "backendlb" {
   loadbalancer_id = azurerm_lb.lb.id
   name            = "BackEndAddressPool"
@@ -126,4 +130,46 @@ resource "azurerm_lb_rule" "rulelb" {
   frontend_ip_configuration_name = "PublicIPAddress"
   probe_id = azurerm_lb_probe.probelb.id
   backend_address_pool_ids = [ azurerm_lb_backend_address_pool.backendlb.id ]
+}
+
+resource "azurerm_network_interface_backend_address_pool_association" "backend_assoc1" {
+  network_interface_id    = module.vm1.nic_id
+  ip_configuration_name   = "internal"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.backendlb.id
+}
+
+resource "azurerm_network_interface_backend_address_pool_association" "backend_assoc2" {
+  network_interface_id    = module.vm2.nic_id
+  ip_configuration_name   = "internal"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.backendlb.id
+}
+
+resource "azurerm_virtual_machine_extension" "vm1-extensions" {
+  name                 = "vm01-ext-webserver"
+  virtual_machine_id   = module.vm1.vm_id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": "powershell Add-WindowsFeature Web-Server"
+    }
+SETTINGS
+
+}
+
+resource "azurerm_virtual_machine_extension" "vm2-extensions" {
+  name                 = "vm01-ext-webserver"
+  virtual_machine_id   = module.vm2.vm_id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": "powershell Add-WindowsFeature Web-Server"
+    }
+SETTINGS
+
 }

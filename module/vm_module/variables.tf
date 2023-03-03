@@ -24,7 +24,5 @@ variable "subnet_id" {
   
 }
 
-
-
 # module klasöründe main.tf yazdiktan sonra icinde yazdigimiz var.resource lari variable lari 
 # burada belirliyoruz

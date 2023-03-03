@@ -13,6 +13,6 @@ variable "subnet1_name" {
 variable "subnet2_name" {
     default = "subnet2"
 }
-variable = "rg2_name" {
+variable "rg2_name" {
     default = "rg2"
 }
