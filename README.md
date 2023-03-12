@@ -1,9 +1,8 @@
-       Terraform-AZ104-imp.png
+              
        
        
-       
-       
-       
+       ![Terraform-AZ104-imp](https://user-images.githubusercontent.com/113948917/224564231-f095affb-f5bb-4933-9358-a8f1e2e6bc44.png)
+
        
         Step by step we can see our implementation:
 1.	Open VS Code, from terminal, I clone my new repository to my local one. 
