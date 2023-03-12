@@ -24,3 +24,6 @@
 17.	First I create a load balancer. To create a new load balancer I need frontend IP, backend pool (should be in rg1 resource group), health probe and inbound rules. For this I take azurerm_resource group, public IP, load balancer, backend_address pool and health probe blocks from Hashicorp and then configure it according to my project. 
 18.	Second, I also create a resource load balancer rules and specify inbound and outbound rules.
 19.	After implementation, we see the following screen on my terminal.
+
+![image](https://user-images.githubusercontent.com/113948917/224564453-f4e47e3e-aa1a-46a4-b44d-1c87d8395b14.png)
+
