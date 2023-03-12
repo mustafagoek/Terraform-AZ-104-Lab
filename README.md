@@ -1,3 +1,10 @@
+       Terraform-AZ104-imp.png
+       
+       
+       
+       
+       
+       
         Step by step we can see our implementation:
 1.	Open VS Code, from terminal, I clone my new repository to my local one. 
 2.	In terminal, I create files main.tf, outputs.tf and variables.tf
